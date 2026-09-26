@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DARAKZO V1 - VIP PANEL</title>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            user-select: none;
+        }
+
+        body {
+            background: #000000; /* Black Background */
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden; /* Hide scrollbars for star animation */
+        }
+
+        /* Glowing Background Element */
+        body::before {
+            content: '';
+            position: absolute;
+            width: 350px;
+            height: 350px;
+            background: radial-gradient(circle, rgba(57, 255, 20, 0.2) 0%, rgba(0, 0, 0, 0) 70%);
+            border-radius: 50%;
+            animation: animateGlow 4s ease-in-out infinite alternate;
+            z-index: 0;
+        }
+
+        @keyframes animateGlow {
+            0% { transform: scale(0.8); opacity: 0.5; }
+            100% { transform: scale(1.2); opacity: 1; }
+        }
+
+        /* Falling Stars Animation Container */
+        #stars-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .star {
+            position: absolute;
+            background: #39ff14; /* Lime Green Stars */
+            border-radius: 50%;
+            box-shadow: 0 0 8px #39ff14, 0 0 15px #39ff14;
+            animation: fall linear infinite;
+        }
+
+        @keyframes fall {
+            0% { transform: translateY(-10px) scale(0.5); opacity: 1; }
+            100% { transform: translateY(100vh) scale(1.2); opacity: 0; }
+        }
+
+        /* Glassmorphism Container */
+        .container {
+            width: 380px;
+            background: rgba(10, 10, 10, 0.85);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid #39ff14;
+            box-shadow: 0 0 20px rgba(57, 255, 20, 0.3), inset 0 0 15px rgba(57, 255, 20, 0.1);
+            padding: 30px;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+            animation: fadeIn 0.8s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .title {
+            color: #39ff14;
+            font-size: 28px;
+            font-weight: 800;
+            letter-spacing: 3px;
+            text-shadow: 0 0 10px #39ff14, 0 0 20px #228b22;
+            margin-bottom: 25px;
+        }
+
+        .input-group {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .input-group i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #39ff14;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 12px 15px 12px 45px;
+            background: #050505;
+            border: 1px solid rgba(57, 255, 20, 0.4);
+            border-radius: 10px;
+            color: #fff;
+            font-size: 14px;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        .input-group input:focus {
+            border-color: #39ff14;
+            box-shadow: 0 0 12px rgba(57, 255, 20, 0.6);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 10px;
+            background: linear-gradient(90deg, #111, #39ff14, #111);
+            background-size: 200% auto;
+            color: #000;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 0 15px rgba(57, 255, 20, 0.5);
+            transition: 0.4s;
+            margin-top: 10px;
+            text-transform: uppercase;
+        }
+
+        .btn:hover {
+            background-position: right center;
+            color: #fff;
+            box-shadow: 0 0 25px #39ff14;
+        }
+
+        /* Error Box & Social Links */
+        .error-box {
+            display: none;
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(255, 0, 0, 0.1);
+            border: 1px solid #ff0000;
+            border-radius: 12px;
+            animation: shake 0.4s ease-in-out;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-8px); }
+            40%, 80% { transform: translateX(8px); }
+        }
+
+        .error-msg {
+            color: #ff3333;
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 12px;
+        }
+
+        .social-title {
+            color: #39ff14;
+            font-size: 12px;
+            margin-bottom: 10px;
+        }
+
+        .social-icons {
+            display: flex;
+            justify-content: space-around;
+        }
+
+        .social-btn {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #fff;
+            font-size: 20px;
+            text-decoration: none;
+            transition: 0.3s;
+            background: #111;
+            border: 1px solid #39ff14;
+            box-shadow: 0 0 8px rgba(57, 255, 20, 0.3);
+        }
+
+        .social-btn:hover {
+            transform: translateY(-5px) scale(1.1);
+            background: #39ff14;
+            color: #000;
+            box-shadow: 0 0 15px #39ff14;
+        }
+
+        /* Main Panel Options */
+        .panel-section {
+            display: none;
+            text-align: left;
+        }
+
+        .function-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #0a0a0a;
+            padding: 12px 15px;
+            margin-bottom: 10px;
+            border-radius: 10px;
+            border: 1px solid rgba(57, 255, 20, 0.2);
+            color: #fff;
+            font-size: 14px;
+            transition: 0.3s;
+        }
+        
+        .function-item:hover {
+            border-color: #39ff14;
+            box-shadow: inset 0 0 10px rgba(57, 255, 20, 0.1);
+        }
+
+        .function-item i {
+            color: #39ff14;
+            margin-right: 8px;
+        }
+
+        /* Custom Switch */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 44px;
+            height: 22px;
+        }
+
+        .switch input { opacity: 0; width: 0; height: 0; }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: #222;
+            transition: .4s;
+            border-radius: 34px;
+            border: 1px solid #444;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 14px;
+            width: 14px;
+            left: 3px;
+            bottom: 3px;
+            background-color: #888;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: #0a2e0a;
+            border-color: #39ff14;
+            box-shadow: 0 0 8px #39ff14;
+        }
+
+        input:checked + .slider:before {
+            background-color: #39ff14;
+            transform: translateX(22px);
+            box-shadow: 0 0 5px #39ff14;
+        }
+
+        /* Modal Popup */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background: #050505;
+            border: 2px solid #39ff14;
+            padding: 25px;
+            border-radius: 15px;
+            width: 320px;
+            text-align: center;
+            box-shadow: 0 0 30px rgba(57, 255, 20, 0.4);
+            animation: zoomIn 0.3s ease;
+        }
+
+        @keyframes zoomIn {
+            from { transform: scale(0.7); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .game-select-btn {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0;
+            border: 1px solid #39ff14;
+            background: rgba(57, 255, 20, 0.1);
+            color: #39ff14;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+            text-transform: uppercase;
+        }
+
+        .game-select-btn:hover {
+            background: #39ff14;
+            color: #000;
+            box-shadow: 0 0 15px #39ff14;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 12px;
+            background: #111;
+            border-radius: 6px;
+            margin-top: 15px;
+            overflow: hidden;
+            display: none;
+            border: 1px solid #333;
+        }
+
+        .progress-fill {
+            width: 0%;
+            height: 100%;
+            background: #39ff14;
+            box-shadow: 0 0 10px #39ff14;
+            transition: width 2s ease;
+        }
+
+        .status-text {
+            color: #39ff14;
+            font-size: 13px;
+            margin-top: 10px;
+            display: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Falling Stars Container -->
+    <div id="stars-container"></div>
+
+    <div class="container">
+        <!-- LOGIN SECTION -->
+        <div id="login-section">
+            <h1 class="title">DARAKZO V1</h1>
+            
+            <div class="input-group">
+                <i class="fas fa-user"></i>
+                <input type="text" id="username" placeholder="Username">
+            </div>
+
+            <div class="input-group">
+                <i class="fas fa-lock"></i>
+                <input type="password" id="password" placeholder="Password">
+            </div>
+
+            <button class="btn" onclick="login()">LOGIN TO PANEL</button>
+
+            <!-- ERROR & SOCIAL MEDIA LINKS -->
+            <div id="error-box" class="error-box">
+                <div class="error-msg"><i class="fas fa-times-circle"></i> User or Password Incorrect!</div>
+                <div class="social-title">Contact Admin to buy VIP Key:</div>
+                <div class="social-icons">
+                    <a href="https://whatsapp.com/channel/0029VbClYoVJ93wbAbqGAd2c" target="_blank" class="social-btn wa"><i class="fab fa-whatsapp"></i></a>
+                    <a href="https://t.me/darakzohexpanel" target="_blank" class="social-btn tg"><i class="fab fa-telegram-plane"></i></a>
+                    <a href="https://youtube.com/@devalmc" target="_blank" class="social-btn yt"><i class="fab fa-youtube"></i></a>
+                    <a href="https://tiktok.com/@darakzoff" target="_blank" class="social-btn tt"><i class="fab fa-tiktok"></i></a>
+                </div>
+            </div>
+        </div>
+
+        <!-- MAIN PANEL SECTION -->
+        <div id="panel-section" class="panel-section">
+            <h1 class="title" style="font-size: 20px;">DARAKZO V1 - VIP</h1>
+            
+            <div class="function-item">
+                <span><i class="fas fa-crosshairs"></i> Auto Headshot 100%</span>
+                <label class="switch"><input type="checkbox"><span class="slider"></span></label>
+            </div>
+
+            <div class="function-item">
+                <span><i class="fas fa-bullseye"></i> Aimbot Drag Pro</span>
+                <label class="switch"><input type="checkbox"><span class="slider"></span></label>
+            </div>
+
+            <div class="function-item">
+                <span><i class="fas fa-eye"></i> ESP Name & Box</span>
+                <label class="switch"><input type="checkbox"><span class="slider"></span></label>
+            </div>
+
+            <div class="function-item">
+                <span><i class="fas fa-running"></i> Speed Hack 3X</span>
+                <label class="switch"><input type="checkbox"><span class="slider"></span></label>
+            </div>
+
+            <div class="function-item">
+                <span><i class="fas fa-shield-alt"></i> Anti-Ban Bypass</span>
+                <label class="switch"><input type="checkbox"><span class="slider"></span></label>
+            </div>
+
+            <button class="btn" onclick="openInjectModal()"><i class="fas fa-syringe"></i> INJECT NOW</button>
+        </div>
+    </div>
+
+    <!-- INJECT MODAL -->
+    <div id="inject-modal" class="modal">
+        <div class="modal-content">
+            <h2 style="color: #39ff14; font-size: 18px; margin-bottom: 15px; text-shadow: 0 0 5px #39ff14;">SELECT GAME</h2>
+            
+            <button class="game-select-btn" onclick="startInject('Free Fire')">
+                <i class="fas fa-gamepad"></i> FREE FIRE
+            </button>
+            <button class="game-select-btn" onclick="startInject('Free Fire MAX')">
+                <i class="fas fa-fire"></i> FREE FIRE MAX
+            </button>
+            
+            <div id="progress-bar" class="progress-bar">
+                <div id="progress-fill" class="progress-fill"></div>
+            </div>
+            <div id="status-text" class="status-text">Injecting Scripts...</div>
+        </div>
+    </div>
+
+    <script>
+        // --- 🌟 තරු වැටෙන Animation එක සෑදීම ---
+        function createStars() {
+            const container = document.getElementById('stars-container');
+            const starCount = 60; // තරු ගණන
+
+            for (let i = 0; i < starCount; i++) {
+                let star = document.createElement('div');
+                star.className = 'star';
+                
+                // Random Size, Position and Speed
+                let size = Math.random() * 3 + 1;
+                star.style.width = size + 'px';
+                star.style.height = size + 'px';
+                star.style.left = Math.random() * 100 + 'vw';
+                star.style.animationDuration = (Math.random() * 3 + 2) + 's'; // 2s to 5s
+                star.style.animationDelay = Math.random() * 5 + 's';
+                
+                container.appendChild(star);
+            }
+        }
+        createStars(); // තරු ක්‍රියාත්මක කිරීම
+
+        // --- 🔐 Username සහ Passwords 10 ක් ඇතුලත් කිරීම ---
+        // මෙහි වම් පස ඇත්තේ Username එකයි, දකුණු පස ඇත්තේ Password එකයි. 
+        // ඔයාට ඕනෙ විදිහට මේවා වෙනස් කරගන්න පුළුවන්.
+        const validAccounts = {
+            "naviya": "1",
+            "darakzo": "1",
+            "lahiru": "1",
+            "akashi": "1",
+            "ezio": "1",
+            "shenu": "1",
+            "banti": "1",
+            "shan": "1",
+            "lukzy": "1",
+            "ashini": "1"
+        };
+
+        function login() {
+            const userIn = document.getElementById('username').value.trim();
+            const passIn = document.getElementById('password').value.trim();
+            const errorBox = document.getElementById('error-box');
+            const loginSec = document.getElementById('login-section');
+            const panelSec = document.getElementById('panel-section');
+
+            // Username එක account ලිස්ට් එකේ තියෙනවද සහ Password එක හරිද කියලා බලනවා
+            if (validAccounts.hasOwnProperty(userIn) && validAccounts[userIn] === passIn) {
+                errorBox.style.display = 'none';
+                loginSec.style.display = 'none';
+                panelSec.style.display = 'block';
+            } else {
+                errorBox.style.display = 'block';
+            }
+        }
+
+        function openInjectModal() {
+            document.getElementById('inject-modal').style.display = 'flex';
+        }
+
+        function startInject(game) {
+            const progressBar = document.getElementById('progress-bar');
+            const progressFill = document.getElementById('progress-fill');
+            const statusText = document.getElementById('status-text');
+            const buttons = document.querySelectorAll('.game-select-btn');
+
+            // බොත්තම් හැංගීම (Hide buttons during injection)
+            buttons.forEach(btn => btn.style.display = 'none');
+
+            progressBar.style.display = 'block';
+            statusText.style.display = 'block';
+            statusText.innerText = `Injecting Bypass to ${game}...`;
+
+            // Progress Bar එක පිරවීම
+            setTimeout(() => {
+                progressFill.style.width = '100%';
+            }, 100);
+
+            // Inject වීම අවසන් වූ පසු Game එක Open කිරීම
+            setTimeout(() => {
+                statusText.innerText = `SUCCESS! OPENING ${game}...`;
+                
+                // තත්පර 1.5 කට පසුව ෆෝන් එකේ Game එක Open වෙනවා (Android Deep Link)
+                setTimeout(() => {
+                    if (game === 'Free Fire') {
+                        // Free Fire සාමාන්‍ය එක විවෘත කිරීම
+                        window.location.href = "intent://#Intent;package=com.dts.freefireth;end;";
+                    } else {
+                        // Free Fire Max විවෘත කිරීම
+                        window.location.href = "intent://#Intent;package=com.dts.freefiremax;end;";
+                    }
+                    
+                    // Modal එක close කර reset කිරීම
+                    document.getElementById('inject-modal').style.display = 'none';
+                    progressFill.style.width = '0%';
+                    buttons.forEach(btn => btn.style.display = 'block');
+                    progressBar.style.display = 'none';
+                    statusText.style.display = 'none';
+
+                }, 1500);
+
+            }, 2200);
+        }
+    </script>
+</body>
+</html>
